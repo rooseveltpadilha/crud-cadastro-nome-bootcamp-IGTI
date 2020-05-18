@@ -1,44 +1,35 @@
-window.addEventListener('load', start)
-
 var globalNames = ['Lara', 'Paulo', 'Caio', 'Roodson', 'Roosevelt'];
 var inputName = null;
 var isEditing = false;
 var currentIndex = null;
 
-function start() {
-  preventFormSubmit();
+window.addEventListener('load', () => {
   inputName = document.querySelector('#inputName');
+  preventFormSubmit();
   activateInput();
   render();
-}
+});
 
 function preventFormSubmit() {
-
-  let form = document.querySelector('form')
-  form.addEventListener('submit', handleFormSubmit)
-
   function handleFormSubmit(event) {
     event.preventDefault()
   }
 
+  let form = document.querySelector('form')
+  form.addEventListener('submit', handleFormSubmit)
 }
 
 function activateInput() {
+  function insertName(newName) {
+    // globalNames.push(newName);
+    globalNames = [...globalNames, newName];
+  }
 
+  function updateName(newName) {
+    globalNames[currentIndex] = newName;
+  }
 
   function handleTyping(event) {
-
-    function updateName(newName) {
-      globalNames[currentIndex] = newName;
-    }
-
-
-    function insertName(newName) {
-      let typedName = newName;
-      globalNames.push(typedName);
-
-    }
-
     if (event.key === 'Enter') {
       if (event.target.value.trim() === '') {
         clearInput();
@@ -63,7 +54,14 @@ function render() {
 
   function createDeleteButton(index) {
     function deleteName() {
-      globalNames.splice(index, 1);
+      //globalNames.splice(index, 1);
+      globalNames = globalNames.filter((_, i) => {
+        // if (i === index) {
+        //   return false;
+        // }
+        // return true;
+        return i !== index;
+      });
       render();
     }
 
@@ -114,7 +112,12 @@ function render() {
   clearInput();
 }
 
-function clearInput() {
+// function clearInput() {
+//   inputName.value = '';
+//   inputName.focus();
+// }
+
+const clearInput = () => {
   inputName.value = '';
   inputName.focus();
 }
